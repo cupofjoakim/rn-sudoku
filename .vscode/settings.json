@@ -1,0 +1,14 @@
+{
+    "search.exclude": {
+      "node_modules": true
+    },
+    "[javascript]": {
+      "editor.formatOnSave": true
+    },
+    "eslint.packageManager": "yarn",
+    "javascript.validate.enable": false,
+    "javascript.format.enable": false,
+    "prettier.eslintIntegration": true,
+    "flow.useNPMPackagedFlow": true
+  }
+  
