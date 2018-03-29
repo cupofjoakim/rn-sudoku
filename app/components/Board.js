@@ -1,6 +1,13 @@
 // @flow
 
-class Board extends React.Component {
+import React, { Component } from "react";
+import { Text, View, StyleSheet } from "react-native";
+import Square from "./Square";
+import SudokuHandler from "./../services/SudokuHandler";
+
+const sudokuHandler = new SudokuHandler();
+
+class Board extends Component<{}> {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +24,7 @@ class Board extends React.Component {
   }
 
   endGame() {
-    this.props.onCompletion();
+    console.log("Game won!");
   }
 
   keyPadPressed(num) {
@@ -99,15 +106,16 @@ class Board extends React.Component {
   }
 
   render() {
+    let occasionalMargin = 10;
     return (
-      <div>
-        <Timer />
+      <View>
         {this.state.currentPuzzle.map((row, rowIndex) => {
+          let rowStyles = [styles.baseRowStyle];
+          if ([2, 5].includes(rowIndex)) {
+            rowStyles.push({ marginBottom: occasionalMargin });
+          }
           return (
-            <div
-              className={"row" + ([2, 5].includes(rowIndex) ? " mb-1" : "")}
-              key={rowIndex}
-            >
+            <View style={rowStyles} key={rowIndex}>
               {row.map((digit, digitIndex) => {
                 return (
                   <Square
@@ -115,20 +123,25 @@ class Board extends React.Component {
                     digit={digit}
                     status={this.getSquareStatus(digit, digitIndex, rowIndex)}
                     digitIndex={digitIndex}
+                    extraMargin={occasionalMargin}
                     onClick={() => {
                       this.selectDigit(digitIndex, rowIndex);
                     }}
                   />
                 );
               })}
-            </div>
+            </View>
           );
         })}
-
-        <Keypad onKeypadNumberPressed={this.keyPadPressed} />
-      </div>
+      </View>
     );
   }
 }
+//         <Keypad onKeypadNumberPressed={this.keyPadPressed} />
+const styles = StyleSheet.create({
+  baseRowStyle: {
+    flexDirection: "row"
+  }
+});
 
 export default Board;

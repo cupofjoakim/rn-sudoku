@@ -1,40 +1,66 @@
 // @flow
 
-class Square extends React.Component {
+import React, { Component } from "react";
+import { Text, View, StyleSheet } from "react-native";
+
+class Square extends Component<{}> {
   constructor(props) {
     super(props);
   }
 
-  constructClassNames() {
-    let classes = "col py-2 border text-center";
+  constructSquareStyle() {
+    let applicableStyles = [styles.baseSquare];
     if ([2, 5].includes(this.props.digitIndex)) {
-      classes += " mr-1";
+      applicableStyles.push({ marginRight: this.props.extraMargin });
     }
     switch (this.props.status) {
       case "wrong":
-        classes += " bg-danger text-white";
+        applicableStyles.push({ backgroundColor: "red" });
         break;
       case "locked":
-        classes += " bg-secondary text-white";
+        applicableStyles.push({ backgroundColor: "grey" });
         break;
       case "selected":
-        classes += " bg-primary text-white";
+        applicableStyles.push({ backgroundColor: "blue" });
         break;
       case "highlighted":
-        classes += " bg-info text-white";
+        applicableStyles.push({ backgroundColor: "aqua" });
         break;
     }
-    return classes;
+    return applicableStyles;
+  }
+
+  constructTextStyle() {
+    return {
+      color: ["wrong", "locked", "selected", "highlighted"].includes(
+        this.props.status
+      )
+        ? "white"
+        : "black"
+    };
   }
 
   render() {
-    let classes = this.constructClassNames();
+    let squareStyle = this.constructSquareStyle();
+    let textStyle = this.constructTextStyle();
+
     return (
-      <div onClick={this.props.onClick} className={classes}>
-        {this.props.digit == 0 ? null : this.props.digit}
-      </div>
+      <View onClick={this.props.onClick} aspectRatio={1} style={squareStyle}>
+        <Text style={textStyle}>
+          {this.props.digit == 0 ? null : this.props.digit}
+        </Text>
+      </View>
     );
   }
 }
+
+var styles = StyleSheet.create({
+  baseSquare: {
+    flex: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+});
 
 export default Square;
