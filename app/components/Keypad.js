@@ -7,7 +7,14 @@ import KeypadNumber from "./KeypadNumber";
 class Keypad extends Component<{}> {
   render() {
     return (
-      <View>
+      <View
+        style={{
+          marginTop: 40,
+          flexDirection: "row",
+          justifyContent: "space-between"
+        }}
+        height={40}
+      >
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => {
           return (
             <KeypadNumber

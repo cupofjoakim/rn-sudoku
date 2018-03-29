@@ -109,7 +109,7 @@ class Board extends Component<{}> {
     return "";
   }
 
-  render() {
+  renderRows() {
     let occasionalMargin = 10;
     return (
       <View>
@@ -137,6 +137,15 @@ class Board extends Component<{}> {
             </View>
           );
         })}
+      </View>
+    );
+  }
+
+  render() {
+    let rows = this.renderRows();
+    return (
+      <View>
+        <View>{rows}</View>
         <Keypad onKeypadNumberPressed={this.keyPadPressed} />
       </View>
     );

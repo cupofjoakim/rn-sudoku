@@ -12,17 +12,15 @@ class KeypadNumber extends Component<{}> {
     return (
       <TouchableOpacity onPress={this.props.onPress}>
         <View
+          aspectRatio={1}
           style={{
             flex: 1,
-            marginRight: 5,
-            marginLeft: 5,
             backgroundColor: "blue",
-            height: 20,
             alignItems: "center",
             justifyContent: "center"
           }}
         >
-          <Text>{this.props.digit}</Text>
+          <Text style={{ color: "white" }}>{this.props.digit}</Text>
         </View>
       </TouchableOpacity>
     );
