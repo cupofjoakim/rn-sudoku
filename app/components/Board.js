@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import Square from "./Square";
+import Keypad from "./Keypad";
 import SudokuHandler from "./../services/SudokuHandler";
 
 const sudokuHandler = new SudokuHandler();
@@ -30,7 +31,7 @@ class Board extends Component<{}> {
   keyPadPressed(num) {
     if (
       this.state.selected == {} ||
-      this.squareShouldBeLocked(
+      this.squareIsBeLocked(
         this.state.selected.digitIndex,
         this.state.selected.rowIndex
       )
@@ -50,7 +51,10 @@ class Board extends Component<{}> {
   }
 
   selectDigit(digitIndex, rowIndex) {
-    if (this.squareIsSelected(digitIndex, rowIndex)) {
+    if (
+      this.squareIsSelected(digitIndex, rowIndex) ||
+      this.squareIsBeLocked(digitIndex, rowIndex)
+    ) {
       this.setState({
         selected: {}
       });
@@ -71,7 +75,7 @@ class Board extends Component<{}> {
     );
   }
 
-  squareShouldBeLocked(digitIndex, rowIndex) {
+  squareIsBeLocked(digitIndex, rowIndex) {
     return sudokuHandler.getPuzzle(5).puzzle[rowIndex][digitIndex] !== 0;
   }
 
@@ -93,7 +97,7 @@ class Board extends Component<{}> {
   }
 
   getSquareStatus(value, digitIndex, rowIndex) {
-    if (this.squareShouldBeLocked(digitIndex, rowIndex)) {
+    if (this.squareIsBeLocked(digitIndex, rowIndex)) {
       return "locked";
     } else if (this.valueIsIncorrect(value, digitIndex, rowIndex)) {
       return "wrong";
@@ -124,7 +128,7 @@ class Board extends Component<{}> {
                     status={this.getSquareStatus(digit, digitIndex, rowIndex)}
                     digitIndex={digitIndex}
                     extraMargin={occasionalMargin}
-                    onClick={() => {
+                    onPress={() => {
                       this.selectDigit(digitIndex, rowIndex);
                     }}
                   />
@@ -133,11 +137,11 @@ class Board extends Component<{}> {
             </View>
           );
         })}
+        <Keypad onKeypadNumberPressed={this.keyPadPressed} />
       </View>
     );
   }
 }
-//         <Keypad onKeypadNumberPressed={this.keyPadPressed} />
 const styles = StyleSheet.create({
   baseRowStyle: {
     flexDirection: "row"

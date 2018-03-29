@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 
 class Square extends Component<{}> {
   constructor(props) {
@@ -45,11 +45,13 @@ class Square extends Component<{}> {
     let textStyle = this.constructTextStyle();
 
     return (
-      <View onClick={this.props.onClick} aspectRatio={1} style={squareStyle}>
-        <Text style={textStyle}>
-          {this.props.digit == 0 ? null : this.props.digit}
-        </Text>
-      </View>
+      <TouchableWithoutFeedback onPress={this.props.onPress}>
+        <View aspectRatio={1} style={squareStyle}>
+          <Text style={textStyle}>
+            {this.props.digit == 0 ? null : this.props.digit}
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

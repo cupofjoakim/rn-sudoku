@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import { Text, View } from "react-native";
 
-class MenuScreen extends React.Component {
+class MenuScreen extends Component<{}> {
   render() {
     return (
       <View>

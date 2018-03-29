@@ -1,19 +1,23 @@
 // @flow
 
-class Keypad extends React.Component {
+import React, { Component } from "react";
+import { View, TouchableOpacity } from "react-native";
+import KeypadNumber from "./KeypadNumber";
+
+class Keypad extends Component<{}> {
   render() {
     return (
-      <div className="row mt-3">
+      <View>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => {
           return (
             <KeypadNumber
               key={num}
               digit={num}
-              onClick={() => this.props.onKeypadNumberPressed(num)}
+              onPress={() => this.props.onKeypadNumberPressed(num)}
             />
           );
         })}
-      </div>
+      </View>
     );
   }
 }

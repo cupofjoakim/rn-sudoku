@@ -1,18 +1,30 @@
 // @flow
 
-class KeypadNumber extends React.Component {
+import React, { Component } from "react";
+import { Text, View, TouchableOpacity } from "react-native";
+
+class KeypadNumber extends Component<{}> {
   constructor(props) {
     super(props);
   }
 
   render() {
     return (
-      <div
-        className="col btn btn-primary text-center mx-1"
-        onClick={this.props.onClick}
-      >
-        {this.props.digit}
-      </div>
+      <TouchableOpacity onPress={this.props.onPress}>
+        <View
+          style={{
+            flex: 1,
+            marginRight: 5,
+            marginLeft: 5,
+            backgroundColor: "blue",
+            height: 20,
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <Text>{this.props.digit}</Text>
+        </View>
+      </TouchableOpacity>
     );
   }
 }
