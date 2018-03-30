@@ -24,9 +24,7 @@ class Board extends Component<{}> {
     this.keyPadPressed = this.keyPadPressed.bind(this);
   }
 
-  endGame() {
-    console.log("Game won!");
-  }
+  endGame() {}
 
   keyPadPressed(num) {
     if (
