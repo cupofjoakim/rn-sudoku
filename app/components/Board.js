@@ -24,6 +24,13 @@ class Board extends Component<{}> {
     this.keyPadPressed = this.keyPadPressed.bind(this);
   }
 
+  componentDidMount() {
+    let that = this;
+    setTimeout(function() {
+      that.props.onLoadingComplete();
+    }, 3000);
+  }
+
   endGame() {}
 
   keyPadPressed(num) {
