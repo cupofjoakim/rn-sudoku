@@ -13,18 +13,34 @@ class Square extends Component<{}> {
     if ([2, 5].includes(this.props.digitIndex)) {
       applicableStyles.push({ marginRight: this.props.extraMargin });
     }
+
+    // This is hella ugly
+    if (this.props.rowIndex == 0) {
+      if (this.props.digitIndex == 0) {
+        applicableStyles.push({ borderTopLeftRadius: 5 });
+      } else if (this.props.digitIndex == 8) {
+        applicableStyles.push({ borderTopRightRadius: 5 });
+      }
+    }
+    if (this.props.rowIndex == 8) {
+      if (this.props.digitIndex == 0) {
+        applicableStyles.push({ borderBottomLeftRadius: 5 });
+      } else if (this.props.digitIndex == 8) {
+        applicableStyles.push({ borderBottomRightRadius: 5 });
+      }
+    }
     switch (this.props.status) {
       case "wrong":
-        applicableStyles.push({ backgroundColor: "red" });
+        applicableStyles.push({ backgroundColor: "#F28282" });
         break;
       case "locked":
-        applicableStyles.push({ backgroundColor: "grey" });
+        applicableStyles.push({ backgroundColor: "#eaeaea" });
         break;
       case "selected":
-        applicableStyles.push({ backgroundColor: "blue" });
+        applicableStyles.push({ backgroundColor: "#3697D3" });
         break;
       case "highlighted":
-        applicableStyles.push({ backgroundColor: "aqua" });
+        applicableStyles.push({ backgroundColor: "#82F0F2" });
         break;
     }
     return applicableStyles;
@@ -32,9 +48,7 @@ class Square extends Component<{}> {
 
   constructTextStyle() {
     return {
-      color: ["wrong", "locked", "selected", "highlighted"].includes(
-        this.props.status
-      )
+      color: ["wrong", "selected"].includes(this.props.status)
         ? "white"
         : "black"
     };
@@ -59,7 +73,8 @@ class Square extends Component<{}> {
 var styles = StyleSheet.create({
   baseSquare: {
     flex: 1,
-    borderWidth: StyleSheet.hairlineWidth,
+    backgroundColor: "white",
+    margin: 2,
     justifyContent: "center",
     alignItems: "center"
   }

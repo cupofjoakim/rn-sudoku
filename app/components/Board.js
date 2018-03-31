@@ -125,6 +125,7 @@ class Board extends Component<{}> {
                     digit={digit}
                     status={this.getSquareStatus(digit, digitIndex, rowIndex)}
                     digitIndex={digitIndex}
+                    rowIndex={rowIndex}
                     extraMargin={occasionalMargin}
                     onPress={() => {
                       this.selectDigit(digitIndex, rowIndex);
