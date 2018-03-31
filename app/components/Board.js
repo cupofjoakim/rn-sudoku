@@ -4,18 +4,15 @@ import React, { Component } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import Square from "./Square";
 import Keypad from "./Keypad";
-import SudokuHandler from "./../services/SudokuHandler";
-
-const sudokuHandler = new SudokuHandler();
 
 class Board extends Component<{}> {
   constructor(props) {
     super(props);
     this.state = {
       selected: {},
-      currentPuzzle: JSON.parse(
-        JSON.stringify(sudokuHandler.getPuzzle(5).puzzle)
-      ),
+      originalPuzzle: this.hardCopy(this.props.puzzle.puzzle),
+      currentPuzzle: this.hardCopy(this.props.puzzle.puzzle),
+      puzzleSolution: this.hardCopy(this.props.puzzle.solution),
       hightlighted: {
         group: null,
         row: null
@@ -24,11 +21,8 @@ class Board extends Component<{}> {
     this.keyPadPressed = this.keyPadPressed.bind(this);
   }
 
-  componentDidMount() {
-    let that = this;
-    setTimeout(function() {
-      that.props.onLoadingComplete();
-    }, 3000);
+  hardCopy(puzzleArr) {
+    return JSON.parse(JSON.stringify(puzzleArr));
   }
 
   endGame() {}
@@ -50,7 +44,7 @@ class Board extends Component<{}> {
     this.setState({
       currentPuzzle: modifiedPuzzle
     });
-    if (sudokuHandler.getPuzzle(5).solution == this.state.currentPuzzle) {
+    if (this.state.puzzleSolution == this.state.currentPuzzle) {
       this.endGame();
     }
   }
@@ -81,7 +75,7 @@ class Board extends Component<{}> {
   }
 
   squareIsBeLocked(digitIndex, rowIndex) {
-    return sudokuHandler.getPuzzle(5).puzzle[rowIndex][digitIndex] !== 0;
+    return this.state.originalPuzzle[rowIndex][digitIndex] !== 0;
   }
 
   checkIfHighlighted(digitIndex, rowIndex) {
@@ -96,8 +90,7 @@ class Board extends Component<{}> {
 
   valueIsIncorrect(value, digitIndex, rowIndex) {
     return (
-      value !== 0 &&
-      sudokuHandler.getPuzzle(5).solution[rowIndex][digitIndex] !== value
+      value !== 0 && this.state.puzzleSolution[rowIndex][digitIndex] !== value
     );
   }
 
@@ -119,7 +112,7 @@ class Board extends Component<{}> {
     return (
       <View>
         {this.state.currentPuzzle.map((row, rowIndex) => {
-          let rowStyles = [styles.baseRowStyle];
+          let rowStyles = [{ flexDirection: "row" }];
           if ([2, 5].includes(rowIndex)) {
             rowStyles.push({ marginBottom: occasionalMargin });
           }
@@ -156,10 +149,5 @@ class Board extends Component<{}> {
     );
   }
 }
-const styles = StyleSheet.create({
-  baseRowStyle: {
-    flexDirection: "row"
-  }
-});
 
 export default Board;
