@@ -33,11 +33,11 @@ class Square extends Component<{}> {
       case "wrong":
         applicableStyles.push({ backgroundColor: "#F28282" });
         break;
-      case "locked":
-        applicableStyles.push({ backgroundColor: "#eaeaea" });
-        break;
       case "selected":
         applicableStyles.push({ backgroundColor: "#3697D3" });
+        break;
+      case "locked":
+        applicableStyles.push({ backgroundColor: "transparent" });
         break;
       case "highlighted":
         applicableStyles.push({ backgroundColor: "#82F0F2" });
@@ -48,7 +48,7 @@ class Square extends Component<{}> {
 
   constructTextStyle() {
     return {
-      color: ["wrong", "selected"].includes(this.props.status)
+      color: ["wrong", "selected", "locked"].includes(this.props.status)
         ? "white"
         : "black"
     };
