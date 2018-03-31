@@ -1,7 +1,14 @@
 // @flow
 
 import React, { Component } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Animated,
+  Easing,
+  Dimensions
+} from "react-native";
 import Board from "../components/Board";
 import Spinner from "../components/Spinner";
 import SudokuHandler from "./../services/SudokuHandler";
@@ -15,6 +22,8 @@ class GameScreen extends Component<{}> {
       puzzle: null
     };
     this.finishLoading = this.finishLoading.bind(this);
+    var { height, width } = Dimensions.get("window");
+    this.boardOffset = new Animated.Value(height);
   }
 
   componentDidMount() {
@@ -29,6 +38,11 @@ class GameScreen extends Component<{}> {
       loading: false,
       puzzle: this.sudokuHandler.getPuzzle(5)
     });
+    Animated.timing(this.boardOffset, {
+      toValue: 0,
+      duration: 450,
+      easing: Easing.elastic(1)
+    }).start();
   }
 
   render() {
