@@ -26,7 +26,17 @@ class Root extends Component<{}> {
     if (this.state.screen == "game") {
       screen = <GameScreen />;
     }
-    return <View style={{ flex: 1 }}>{screen}</View>;
+    return (
+      <View
+        style={{
+          flex: 1,
+          padding: 20,
+          backgroundColor: "#2D4277"
+        }}
+      >
+        {screen}
+      </View>
+    );
   }
 }
 
