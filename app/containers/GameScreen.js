@@ -51,10 +51,8 @@ class GameScreen extends Component<{}> {
     ) : (
       <View />
     );
-    let spinner = this.state.loading ? <Spinner /> : <View />;
     return (
       <View>
-        {spinner}
         <Animated.View style={{ top: this.boardOffset }}>{board}</Animated.View>
       </View>
     );
