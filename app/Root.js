@@ -1,29 +1,28 @@
 // @flow
 
-import React, { Component } from "react";
-import { View } from "react-native";
-import MenuScreen from "./containers/MenuScreen";
-import GameScreen from "./containers/GameScreen";
-import SettingsScreen from "./containers/SettingsScreen";
+import React, { Component } from 'react';
+import { View } from 'react-native';
+import MenuScreen from './containers/MenuScreen';
+import GameScreen from './containers/GameScreen';
 
 class Root extends Component<{}> {
   constructor(props) {
     super(props);
     this.state = {
-      screen: "menu"
+      screen: 'menu',
     };
     this.showScreen = this.showScreen.bind(this);
   }
 
   showScreen(screen) {
     this.setState({
-      screen: screen
+      screen,
     });
   }
 
   render() {
     let screen = <MenuScreen onNavigationTry={this.showScreen} />;
-    if (this.state.screen == "game") {
+    if (this.state.screen === 'game') {
       screen = <GameScreen />;
     }
     return (
@@ -31,7 +30,7 @@ class Root extends Component<{}> {
         style={{
           flex: 1,
           padding: 20,
-          backgroundColor: "#2D4277"
+          backgroundColor: '#2D4277',
         }}
       >
         {screen}

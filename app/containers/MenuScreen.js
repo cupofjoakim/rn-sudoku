@@ -1,9 +1,31 @@
 // @flow
 
-import React, { Component } from "react";
-import { Text, View, Button, StyleSheet } from "react-native";
+import React, { Component } from 'react';
+import { Text, View, Button, StyleSheet } from 'react-native';
 
-class MenuScreen extends Component<{}> {
+const styles = StyleSheet.create({
+  viewTitle: {
+    fontSize: 36,
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 55,
+  },
+  dividerRuler: {
+    flex: 1,
+    marginHorizontal: 23,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: 'white',
+  },
+  dividerText: {
+    fontStyle: 'italic',
+    fontSize: 18,
+    color: 'white',
+    textAlign: 'center',
+  },
+});
+
+class MenuScreen extends Component<{ onNavigationTry: any }> {
   render() {
     return (
       <View style={{ paddingTop: 90 }}>
@@ -16,8 +38,8 @@ class MenuScreen extends Component<{}> {
         <View
           style={{
             marginVertical: 36,
-            flexDirection: "row",
-            alignItems: "center"
+            flexDirection: 'row',
+            alignItems: 'center',
           }}
         >
           <View style={styles.dividerRuler} />
@@ -26,7 +48,7 @@ class MenuScreen extends Component<{}> {
         </View>
         <Button
           onPress={() => {
-            this.props.onNavigationTry("game");
+            this.props.onNavigationTry('game');
           }}
           title="New Game"
           accessibilityLabel="Start a new game"
@@ -35,27 +57,5 @@ class MenuScreen extends Component<{}> {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  viewTitle: {
-    fontSize: 36,
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 55
-  },
-  dividerRuler: {
-    flex: 1,
-    marginHorizontal: 23,
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: "white"
-  },
-  dividerText: {
-    fontStyle: "italic",
-    fontSize: 18,
-    color: "white",
-    textAlign: "center"
-  }
-});
 
 export default MenuScreen;

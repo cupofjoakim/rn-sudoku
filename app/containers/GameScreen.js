@@ -1,17 +1,9 @@
 // @flow
 
-import React, { Component } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Animated,
-  Easing,
-  Dimensions
-} from "react-native";
-import Board from "../components/Board";
-import Spinner from "../components/Spinner";
-import SudokuHandler from "./../services/SudokuHandler";
+import React, { Component } from 'react';
+import { View, Animated, Easing, Dimensions } from 'react-native';
+import Board from '../components/Board';
+import SudokuHandler from './../services/SudokuHandler';
 
 class GameScreen extends Component<{}> {
   constructor(props) {
@@ -19,16 +11,16 @@ class GameScreen extends Component<{}> {
     this.sudokuHandler = new SudokuHandler();
     this.state = {
       loading: true,
-      puzzle: null
+      puzzle: null,
     };
     this.finishLoading = this.finishLoading.bind(this);
-    var { height, width } = Dimensions.get("window");
+    const { height, width } = Dimensions.get('window');
     this.boardOffset = new Animated.Value(height);
   }
 
   componentDidMount() {
-    let that = this;
-    setTimeout(function() {
+    const that = this;
+    setTimeout(() => {
       that.finishLoading();
     }, 1000);
   }
@@ -36,21 +28,17 @@ class GameScreen extends Component<{}> {
   finishLoading() {
     this.setState({
       loading: false,
-      puzzle: this.sudokuHandler.getPuzzle(5)
+      puzzle: this.sudokuHandler.getPuzzle(5),
     });
     Animated.timing(this.boardOffset, {
       toValue: 0,
       duration: 450,
-      easing: Easing.elastic(1)
+      easing: Easing.elastic(1),
     }).start();
   }
 
   render() {
-    let board = this.state.puzzle ? (
-      <Board puzzle={this.state.puzzle} />
-    ) : (
-      <View />
-    );
+    const board = this.state.puzzle ? <Board puzzle={this.state.puzzle} /> : <View />;
     return (
       <View>
         <Animated.View style={{ top: this.boardOffset }}>{board}</Animated.View>

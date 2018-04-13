@@ -1,13 +1,9 @@
 // @flow
 
-import React, { Component } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import React, { Component } from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
 
-class KeypadNumber extends Component<{}> {
-  constructor(props) {
-    super(props);
-  }
-
+class KeypadNumber extends Component<{ onPress: any, digit: number }> {
   render() {
     return (
       <TouchableOpacity onPress={this.props.onPress}>
@@ -15,12 +11,12 @@ class KeypadNumber extends Component<{}> {
           aspectRatio={1}
           style={{
             flex: 1,
-            backgroundColor: "blue",
-            alignItems: "center",
-            justifyContent: "center"
+            backgroundColor: 'blue',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          <Text style={{ color: "white" }}>{this.props.digit}</Text>
+          <Text style={{ color: 'white' }}>{this.props.digit}</Text>
         </View>
       </TouchableOpacity>
     );

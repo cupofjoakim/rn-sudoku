@@ -1,11 +1,15 @@
 // @flow
 
-import React, { Component } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import Square from "./Square";
-import Keypad from "./Keypad";
+import React, { Component } from 'react';
+import { View } from 'react-native';
+import Square from './Square';
+import Keypad from './Keypad';
 
-class Board extends Component<{}> {
+class Board extends Component<{ puzzle: { puzzle: any, solution: any } }> {
+  static hardCopy(puzzleArr) {
+    return JSON.parse(JSON.stringify(puzzleArr));
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -13,40 +17,44 @@ class Board extends Component<{}> {
       originalPuzzle: this.hardCopy(this.props.puzzle.puzzle),
       currentPuzzle: this.hardCopy(this.props.puzzle.puzzle),
       puzzleSolution: this.hardCopy(this.props.puzzle.solution),
-      hightlighted: {
-        group: null,
-        row: null
-      }
     };
     this.keyPadPressed = this.keyPadPressed.bind(this);
   }
 
-  hardCopy(puzzleArr) {
-    return JSON.parse(JSON.stringify(puzzleArr));
+  getSquareStatus(value, digitIndex, rowIndex) {
+    if (this.squareIsBeLocked(digitIndex, rowIndex)) {
+      return 'locked';
+    } else if (this.valueIsIncorrect(value, digitIndex, rowIndex)) {
+      return 'wrong';
+    } else if (this.squareIsSelected(digitIndex, rowIndex)) {
+      return 'selected';
+    } else if (this.checkIfHighlighted(digitIndex, rowIndex)) {
+      return 'highlighted';
+    }
+    return '';
   }
 
-  endGame() {}
+  checkIfHighlighted(digitIndex, rowIndex) {
+    const inSameColumn = digitIndex === this.state.selected.digitIndex;
+    const inSameRow = rowIndex === this.state.selected.rowIndex;
+    const inSameGroup =
+      Math.floor(digitIndex / 3) === Math.floor(this.state.selected.digitIndex / 3) &&
+      Math.floor(rowIndex / 3) === Math.floor(this.state.selected.rowIndex / 3);
+    return inSameColumn || inSameRow || inSameGroup;
+  }
 
-  keyPadPressed(num) {
-    if (
-      this.state.selected == {} ||
-      this.squareIsBeLocked(
-        this.state.selected.digitIndex,
-        this.state.selected.rowIndex
-      )
-    ) {
-      return;
-    }
-    let modifiedPuzzle = this.state.currentPuzzle.slice(0);
-    modifiedPuzzle[this.state.selected.rowIndex][
-      this.state.selected.digitIndex
-    ] = num;
-    this.setState({
-      currentPuzzle: modifiedPuzzle
-    });
-    if (this.state.puzzleSolution == this.state.currentPuzzle) {
-      this.endGame();
-    }
+  valueIsIncorrect(value, digitIndex, rowIndex) {
+    return value !== 0 && this.state.puzzleSolution[rowIndex][digitIndex] !== value;
+  }
+
+  squareIsBeLocked(digitIndex, rowIndex) {
+    return this.state.originalPuzzle[rowIndex][digitIndex] !== 0;
+  }
+
+  squareIsSelected(digitIndex, rowIndex) {
+    return (
+      this.state.selected.rowIndex === rowIndex && this.state.selected.digitIndex === digitIndex
+    );
   }
 
   selectDigit(digitIndex, rowIndex) {
@@ -55,84 +63,62 @@ class Board extends Component<{}> {
       this.squareIsBeLocked(digitIndex, rowIndex)
     ) {
       this.setState({
-        selected: {}
+        selected: {},
       });
     } else {
       this.setState({
         selected: {
-          rowIndex: rowIndex,
-          digitIndex: digitIndex
-        }
+          rowIndex,
+          digitIndex,
+        },
       });
     }
   }
 
-  squareIsSelected(digitIndex, rowIndex) {
-    return (
-      this.state.selected.rowIndex == rowIndex &&
-      this.state.selected.digitIndex == digitIndex
-    );
-  }
-
-  squareIsBeLocked(digitIndex, rowIndex) {
-    return this.state.originalPuzzle[rowIndex][digitIndex] !== 0;
-  }
-
-  checkIfHighlighted(digitIndex, rowIndex) {
-    let inSameColumn = digitIndex == this.state.selected.digitIndex;
-    let inSameRow = rowIndex == this.state.selected.rowIndex;
-    let inSameGroup =
-      Math.floor(digitIndex / 3) ==
-        Math.floor(this.state.selected.digitIndex / 3) &&
-      Math.floor(rowIndex / 3) == Math.floor(this.state.selected.rowIndex / 3);
-    return inSameColumn || inSameRow || inSameGroup;
-  }
-
-  valueIsIncorrect(value, digitIndex, rowIndex) {
-    return (
-      value !== 0 && this.state.puzzleSolution[rowIndex][digitIndex] !== value
-    );
-  }
-
-  getSquareStatus(value, digitIndex, rowIndex) {
-    if (this.squareIsBeLocked(digitIndex, rowIndex)) {
-      return "locked";
-    } else if (this.valueIsIncorrect(value, digitIndex, rowIndex)) {
-      return "wrong";
-    } else if (this.squareIsSelected(digitIndex, rowIndex)) {
-      return "selected";
-    } else if (this.checkIfHighlighted(digitIndex, rowIndex)) {
-      return "highlighted";
+  keyPadPressed(num) {
+    if (
+      this.state.selected === {} ||
+      this.squareIsBeLocked(this.state.selected.digitIndex, this.state.selected.rowIndex)
+    ) {
+      return;
     }
-    return "";
+    const modifiedPuzzle = this.state.currentPuzzle.slice(0);
+    modifiedPuzzle[this.state.selected.rowIndex][this.state.selected.digitIndex] = num;
+    this.setState({
+      currentPuzzle: modifiedPuzzle,
+    });
+    if (this.state.puzzleSolution === this.state.currentPuzzle) {
+      this.endGame();
+    }
   }
+
+  endGame() {}
 
   renderRows() {
-    let occasionalMargin = 10;
+    const occasionalMargin = 10;
     return (
       <View>
         {this.state.currentPuzzle.map((row, rowIndex) => {
-          let rowStyles = [{ flexDirection: "row" }];
+          const rowStyles = [{ flexDirection: 'row' }];
           if ([2, 5].includes(rowIndex)) {
             rowStyles.push({ marginBottom: occasionalMargin });
           }
+          const key = rowIndex;
           return (
-            <View style={rowStyles} key={rowIndex}>
-              {row.map((digit, digitIndex) => {
-                return (
-                  <Square
-                    key={parseInt(rowIndex.toString() + digitIndex.toString())}
-                    digit={digit}
-                    status={this.getSquareStatus(digit, digitIndex, rowIndex)}
-                    digitIndex={digitIndex}
-                    rowIndex={rowIndex}
-                    extraMargin={occasionalMargin}
-                    onPress={() => {
-                      this.selectDigit(digitIndex, rowIndex);
-                    }}
-                  />
-                );
-              })}
+            <View style={rowStyles} key={key}>
+              {row.map((digit, digitIndex) => (
+                <Square
+                  key={parseInt(rowIndex.toString() + digitIndex.toString(), 10)}
+                  digit={digit}
+                  status={this.getSquareStatus(digit, digitIndex, rowIndex)}
+                  digitIndex={digitIndex}
+                  rowIndex={rowIndex}
+                  extraMargin={occasionalMargin}
+                  onPress={() => {
+                    this.selectDigit(digitIndex, rowIndex);
+                  }}
+                />
+              ))}
             </View>
           );
         })}
@@ -141,7 +127,7 @@ class Board extends Component<{}> {
   }
 
   render() {
-    let rows = this.renderRows();
+    const rows = this.renderRows();
     return (
       <View>
         <View>{rows}</View>
